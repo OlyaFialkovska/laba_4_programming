@@ -1,82 +1,105 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
-int in(int g,int k)
+
+//Заповнення елементів масива
+void fill (int *mas, int nrow, int ncol)
+
 {
-    if (g>k)
-        return rand()%100-50;
-    else
-        return 0;
-}
-void in_printf(int g,int u[g],char p)//g=a;g=b;g=c, u=A;u=B;u=C
-{
-    printf("Start масив %c\n",p);
-    separator();
-    for(int i=0; i<g; i++)
-        printf("%d\t",u[i]);
-    printf("\n");
-    separator();
-}
-int condition(int r1,int g,int k,int u[g])
-{
-    int buf;
-    for( r1 = 1; r1 <= k; r1++)
+    for (int i = 0; i < nrow; i++)
     {
-        buf = u[g-1];
-        for( int i = g-2; i>=0; i--)
+        for (int j = 0; j < ncol; j++)
         {
-            u[i+1]= u[i];
+            mas[i*ncol + j] = i+j+2;
+            // printf(" %2d", mas[i*ncol + j]);
         }
-        u[0] = buf;
     }
 }
-void out(int g,int u[g],char p)
-{
-    printf("Changed масив %c\n",p);
-    separator();
-    for(int i=0; i<g; i++)
-        printf("%d\t",u[i]);
-    printf("\n");
-    separator();
-}
-void separator()
-{
-    for(int i = 1; i < 9*13; i++)
-        printf("-");
-    printf("\n");
-}
-int main()
-{
-    setlocale (LC_ALL, "Ukrainian");
-    const a = 10, b = 7, c = 13;
-    int r,k,i,A[a],B[b],C[c];
 
-    printf("|Ввод k:");
-    scanf("%d",&k);
-    separator();
-    if(in(a,k) && in(b,k) && in(c,k))
+//Знаходження першого мінімального і останнього максимального
+int find (int *mas, int nrow, int ncol)
+{
+    for(int i=0;i<nrow;i++)
+        for(int j=0;j<ncol;j++)
+    if(a[i]== 32767)
     {
-        for( i = 0; i<a && i<b && i<c; i++)//&&
-        {
-            A[i]=in(a,k);
-            B[i]=in(b,k);
-            C[i]=in(c,k);
-        }
-        in_printf(a,A,'A');
-        in_printf(b,B,'B');
-        in_printf(c,C,'C');
+        int imax=0,imin=0;
 
+    int min = mas[0];
+    for (int j = 0; j < ncol; j++)
+    {
+        for(int i = 0; i < nrow; i++)
+        {
+            if (min > mas[i*ncol + j])
+            {
+                min = mas[i*ncol + j]; // Максимальне
+                imin=i*ncol + j;
+            }
+        }
+    }
+    printf("  Min = %d\n", min);
+
+    int max = mas[0];
+    for (int j = 0; j < ncol; j++)
+    {
+        for(int i = 0; i < nrow; i++)
+        {
+            if (max <= mas[i*ncol + j])
+            {
+                max = mas[i*ncol + j]; //Мінімальне
+                imax=i*ncol + j;
+            }
+        }
+    }
+    printf("  Max = %d\n", max);
+
+    mas[imin]=max; //зміна
+    mas[imax]=min;
+    printf("\n");
+    printf("  Changed array\n");
+    return 1;
+    }else
+    {
+         return 0;
+    }
+
+
+}
+//Виведення масивів
+void Out (int *mas, int nrow, int ncol)
+{
+    for (int i = 0; i < nrow; i++)
+    {
+        for (int j = 0; j < ncol; j++)
+        {
+            printf(" %2d", mas[i*ncol + j]);
+        }
         printf("\n");
-
-        condition(r,a,k,A);
-        condition(r,b,k,B);
-        condition(r,c,k,C);
-
-        out(a,A,'A');
-        out(b,B,'B');
-        out(c,C,'C');
     }
-    else
-        printf("Умова не виконується\n");
+}
+
+main()
+{
+    int A[4][4], B[5][9], C[6][6];
+
+    printf("  Array A\n");
+    fill (&A,4,4);
+    Out (&A,4,4);
+    find (&A,4,4);
+    Out (&A,4,4);
+    printf("\n");
+
+    printf("  Array B\n");
+    fill (&B,5,9);
+    Out (&B,5,9);
+    find (&B,5,9);
+    Out (&B,5,9);
+    printf("\n");
+
+    printf("  Array C\n");
+    fill (&C,6,6);
+    Out (&C,6,6);
+    find (&C,6,6);
+    Out (&C,6,6);
+
     return 0;
 }
